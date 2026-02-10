@@ -54,5 +54,23 @@ public class OrdenReparacion {
             estadoRep = EstadoRep.En_proceso;
         }
     }
+
+    public void setCita(Cita cita) {
+    this.cita = cita;
+    }
+
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
+    }
+
+    public void setTrabajador(Trabajador trabajador) {
+        this.trabajador = trabajador;
+    }
+
+    public void setDiagnostico(String diagnostico) {
+        this.diagnostico = diagnostico;
+    }
+
+
 }
 
