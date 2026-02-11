@@ -28,20 +28,20 @@ public class AuthService {
 
         // 1. Buscamos en la tabla Cliente
         var cliente = clienteRepo.findByUsuario(request.getUsuario());
-        if (cliente.isPresent() && passwordEncoder.matches(request.getContraseña(), cliente.get().getContraseña())) {
-            return buildResponse(cliente.get().getIdCliente(), cliente.get().getUsuario(), "cliente", cliente.get().getNombre());
+        if (cliente.isPresent() && passwordEncoder.matches(request.getContrasena(), cliente.get().getContrasena())) {
+            return buildResponse(cliente.get().getIdCliente().toString(), cliente.get().getUsuario(), "cliente", cliente.get().getNombre());
         }
 
         // 2. Si no, buscamos en la tabla Trabajador
         var trabajador = trabajadorRepo.findByUsuario(request.getUsuario());
-        if (trabajador.isPresent() && passwordEncoder.matches(request.getContraseña(), trabajador.get().getContraseña())) {
-            return buildResponse(trabajador.get().getIdTrabajador(), trabajador.get().getUsuario(), "trabajador", trabajador.get().getNombre());
+        if (trabajador.isPresent() && passwordEncoder.matches(request.getContrasena(), trabajador.get().getContrasena())) {
+            return buildResponse(trabajador.get().getIdTrabajador().toString(), trabajador.get().getUsuario(), "trabajador", trabajador.get().getNombre());
         }
 
         // 3. Si no, buscamos en la tabla Administrador
         var admin = adminRepo.findByUsuario(request.getUsuario());
-        if (admin.isPresent() && passwordEncoder.matches(request.getContraseña(), admin.get().getContraseña())) {
-            return buildResponse(admin.get().getIdAdmin(), admin.get().getUsuario(), "administrador", admin.get().getNombre());
+        if (admin.isPresent() && passwordEncoder.matches(request.getContrasena(), admin.get().getContrasena())) {
+            return buildResponse(admin.get().getIdAdmin().toString(), admin.get().getUsuario(), "administrador", admin.get().getNombre());
         }
 
         throw new RuntimeException("Credenciales inválidas");

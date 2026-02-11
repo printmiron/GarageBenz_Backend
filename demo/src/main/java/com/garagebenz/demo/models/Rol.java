@@ -34,5 +34,23 @@ public class Rol {
             idRol = UUID.randomUUID();
         }
     }
+
+    public UUID getIdRol() {
+        return idRol;
+    }
+
+    public void setIdRol(UUID idRol) {
+        this.idRol = idRol;
+    }
+
+    public NombreRol getNombreRol() {
+        return nombreRol;
+    }
+
+    public void setNombreRol(NombreRol nombreRol) {
+        this.nombreRol = nombreRol;
+    }
+
+    
     
 }

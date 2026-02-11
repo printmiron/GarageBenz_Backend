@@ -13,7 +13,7 @@ import com.garagebenz.demo.dto.LoginRequest;
 import com.garagebenz.demo.service.AuthService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 @CrossOrigin(origins = "http://localhost:4200") // Permite que Angular entre
 public class AuthController {
 

@@ -1,17 +1,15 @@
 package com.garagebenz.demo.service;
 
-import java.util.List;
+
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
 import com.garagebenz.demo.models.Cita;
-import com.garagebenz.demo.models.Cliente;
 import com.garagebenz.demo.models.OrdenReparacion;
 import com.garagebenz.demo.models.Trabajador;
 import com.garagebenz.demo.models.Vehiculo;
 import com.garagebenz.demo.repository.CitaRepository;
-import com.garagebenz.demo.repository.ClienteRepository;
 import com.garagebenz.demo.repository.OrdenReparacionRepository;
 import com.garagebenz.demo.repository.TrabajadorRepository;
 import com.garagebenz.demo.repository.VehiculoRepository;

@@ -2,15 +2,15 @@ package com.garagebenz.demo.dto;
 
 public class LoginRequest {
     private String usuario;
-    private String contraseña;
+    private String contrasena;
 
     
     public LoginRequest() {}
 
     // Constructor con parámetros
-    public LoginRequest(String usuario, String contraseña) {
+    public LoginRequest(String usuario, String contrasena) {
         this.usuario = usuario;
-        this.contraseña = contraseña;
+        this.contrasena = contrasena;
     }
 
     // Getters y Setters
@@ -22,11 +22,11 @@ public class LoginRequest {
         this.usuario = usuario;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getContrasena() {
+        return contrasena;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 }
