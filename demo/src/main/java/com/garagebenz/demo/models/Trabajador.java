@@ -2,6 +2,8 @@ package com.garagebenz.demo.models;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.JdbcTypeCode;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -14,8 +16,10 @@ import jakarta.persistence.Table;
 @Table(name = "Trabajador")
 public class Trabajador {
     @Id
+    @JdbcTypeCode(java.sql.Types.VARCHAR)
     @Column(name = "id_trabajador", columnDefinition = "CHAR(36)")
     private UUID idTrabajador;
+
     @Column(nullable = false)
     private String nombre;
 

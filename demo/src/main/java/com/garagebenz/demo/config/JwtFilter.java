@@ -11,6 +11,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.garagebenz.demo.service.CustomUserDetailsService;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +25,7 @@ public class JwtFilter extends OncePerRequestFilter {
     private com.garagebenz.demo.service.JwtService jwtService;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private CustomUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -32,31 +34,36 @@ public class JwtFilter extends OncePerRequestFilter {
             FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // 1. Obtenemos el token del header "Authorization"
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String username;
 
-        String path = request.getRequestURI();
-
-        // Log temporal para depurar (mira si esto sale en tu consola de Spring ahora)
-        System.out.println("Filtro interceptando ruta: " + path);
-
-        // Si no hay token o la ruta es de login, dejamos pasar sin validar
-        if (path.contains("/auth/")) {
+        // 1. Verificación inicial: Si no hay header, seguimos sin autenticar
+        if (authHeader == null || authHeader.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Como en Angular envíamos el token directo (sin "Bearer "), lo tomamos tal cual
-        jwt = authHeader;
-        username = jwtService.extractUsername(jwt);
+        // 2. Extracción flexible del Token
+        if (authHeader.startsWith("Bearer ")) {
+            jwt = authHeader.substring(7);
+        } else {
+            // Esto permite que funcione si Angular envía el token "pelado"
+            jwt = authHeader;
+        }
 
-        // 2. Si hay usuario y no está ya autenticado en esta petición
+        try {
+            username = jwtService.extractUsername(jwt);
+        } catch (Exception e) {
+            // Si el token está mal formado o corrupto, seguimos la cadena
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 3. Validación y Autenticación en el contexto de Spring
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            // 3. Si el token es válido, le damos permiso
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -65,12 +72,10 @@ public class JwtFilter extends OncePerRequestFilter {
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                // Establecemos la seguridad para esta petición
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
 
-        // 4. Continuar con el siguiente filtro
         filterChain.doFilter(request, response);
     }
 }

@@ -23,6 +23,11 @@ public class JwtService {
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+    // Para extraer el rol después si lo necesitas
+
+    public String extractRol(String token) {
+        return extractClaim(token, claims -> claims.get("rol", String.class));
+    }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
@@ -55,7 +60,7 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-    
+
     // Este es el método que usará tu AuthService de Spring para crear el token inicial
     public String generateToken(String username, String rol) {
         return Jwts.builder()
