@@ -2,6 +2,8 @@ package com.garagebenz.demo.models;
 
 import java.util.UUID;
 
+import org.hibernate.annotations.JdbcTypeCode;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,6 +17,7 @@ import jakarta.persistence.Table;
 public class Rol {
 
     @Id
+    @JdbcTypeCode(java.sql.Types.VARCHAR)
     @Column(name = "id_rol", columnDefinition = "CHAR(36)")
     private UUID idRol;
 
@@ -34,5 +37,23 @@ public class Rol {
             idRol = UUID.randomUUID();
         }
     }
+
+    public UUID getIdRol() {
+        return idRol;
+    }
+
+    public void setIdRol(UUID idRol) {
+        this.idRol = idRol;
+    }
+
+    public NombreRol getNombreRol() {
+        return nombreRol;
+    }
+
+    public void setNombreRol(NombreRol nombreRol) {
+        this.nombreRol = nombreRol;
+    }
+
+    
     
 }

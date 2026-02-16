@@ -53,4 +53,63 @@ public class Cita {
         }
     }
 
+    public UUID getIdCita() {
+        return idCita;
+    }
+
+    public void setIdCita(UUID idCita) {
+        this.idCita = idCita;
+    }
+
+    public LocalTime getHoraCita() {
+        return horaCita;
+    }
+
+    public void setHoraCita(LocalTime horaCita) {
+        this.horaCita = horaCita;
+    }
+
+    public LocalDate getFechaCita() {
+        return fechaCita;
+    }
+
+    public void setFechaCita(LocalDate fechaCita) {
+        this.fechaCita = fechaCita;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public EstadoCita getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoCita estado) {
+        this.estado = estado;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public Vehiculo getVehiculo() {
+        return vehiculo;
+    }
+
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
+    }
+
+
+    
+
 }
