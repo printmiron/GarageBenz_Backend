@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableWebSecurity
-public class SecutiryConfig {
+public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
@@ -25,6 +25,7 @@ public class SecutiryConfig {
                 .authorizeHttpRequests(auth -> auth
                 // Usamos el asterisco doble para asegurar que entre
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated()
                 )
                 // Esto es vital: si hay un error de autenticación, que nos diga algo

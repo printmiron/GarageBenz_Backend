@@ -29,7 +29,7 @@ public class AuthService {
     private JwtService jwtService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired 
+    @Autowired
     private RolRepository rolRepo;
 
     public AuthResponseDTO login(LoginRequest request) {
@@ -44,16 +44,7 @@ public class AuthService {
                 return buildResponse(clienteOpt.get().getIdCliente().toString(), username, "cliente", clienteOpt.get().getNombre());
 
             }
-            System.out.println("DEBUG -> Password enviada: " + passwordEnviada);
-            System.out.println("DEBUG -> Hash en DB: " + hashDB);
-            // Dentro de if (clienteOpt.isPresent())
-            System.out.println("Usuario encontrado en DB: " + clienteOpt.get().getUsuario());
-            System.out.println("Hash en DB: [" + hashDB + "]");
-            boolean coincide = passwordEncoder.matches(passwordEnviada, hashDB);
-            System.out.println("¿La contraseña coincide?: " + coincide);
-            // Sustituye temporalmente tu if por esto para probar:
-            boolean pruebaManual = passwordEncoder.matches("12345", "$2a$10$8.UnVuG9HHgffUDAlk8q6Ou5HEMFYvYZpuOTjDG7p8EDLpSOfS5S2");
-            System.out.println("PRUEBA HARDCODED: " + pruebaManual);
+
         }
 
         // 2. Buscar en Trabajador
