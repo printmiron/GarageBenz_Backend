@@ -39,34 +39,33 @@ public class AuthService {
         // 1. Buscar en Clientes
         var clienteOpt = clienteRepo.findByUsuario(username);
         if (clienteOpt.isPresent()) {
-            String hashDB = clienteOpt.get().getContrasena().trim(); // .trim() por seguridad
-            if (passwordEncoder.matches(passwordEnviada, hashDB)) {
-                return buildResponse(clienteOpt.get().getIdCliente().toString(), username, "cliente", clienteOpt.get().getNombre());
-
+            Cliente c = clienteOpt.get();
+            if (passwordEncoder.matches(passwordEnviada, c.getContrasena().trim())) {
+                String rolReal = c.getRol().getNombreRol().name().toLowerCase();
+                return buildResponse(c.getIdCliente().toString(), username, rolReal, c.getNombre());
             }
-
         }
 
         // 2. Buscar en Trabajador
         var trabajadorOpt = trabajadorRepo.findByUsuario(username);
         if (trabajadorOpt.isPresent()) {
-            String hashDB = trabajadorOpt.get().getContrasena().trim();
-            if (passwordEncoder.matches(passwordEnviada, hashDB)) {
-                return buildResponse(trabajadorOpt.get().getIdTrabajador().toString(), username, "trabajador", trabajadorOpt.get().getNombre());
+            var t = trabajadorOpt.get();
+            if (passwordEncoder.matches(passwordEnviada, t.getContrasena().trim())) {
+                String rolReal = t.getRol().getNombreRol().name().toLowerCase();
+                return buildResponse(t.getIdTrabajador().toString(), username, rolReal, t.getNombre());
             }
         }
 
         // 3. Buscar en Administrador
         var adminOpt = adminRepo.findByUsuario(username);
         if (adminOpt.isPresent()) {
-            String hashDB = adminOpt.get().getContrasena().trim();
-            if (passwordEncoder.matches(passwordEnviada, hashDB)) {
-                return buildResponse(adminOpt.get().getIdAdmin().toString(), username, "administrador", adminOpt.get().getNombre());
+            var a = adminOpt.get();
+            if (passwordEncoder.matches(passwordEnviada, a.getContrasena().trim())) {
+                String rolReal = a.getRol().getNombreRol().name().toLowerCase();
+                return buildResponse(a.getIdAdmin().toString(), username, rolReal, a.getNombre());
             }
         }
 
-        // Si llegó aquí es que nada coincidió
-        System.out.println("Fallo de login para: " + username);
         throw new RuntimeException("Credenciales inválidas");
     }
 
