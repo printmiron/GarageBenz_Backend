@@ -1,8 +1,13 @@
 package com.garagebenz.demo.models;
 
 import java.math.BigDecimal;
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import org.hibernate.annotations.JdbcTypeCode;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,19 +24,23 @@ import jakarta.persistence.Table;
 public class OrdenReparacion {
 
     @Id
+    @JdbcTypeCode(Types.VARCHAR) // <-- AÑADE ESTA LÍNEA AQUÍ
     @Column(name = "id_or", columnDefinition = "CHAR(36)", nullable = false, updatable = false)
     private UUID idOr;
 
     @ManyToOne
     @JoinColumn(name = "id_cita", nullable = false)
+    @JsonIgnoreProperties("cliente")
     private Cita cita;
 
     @ManyToOne
     @JoinColumn(name = "id_vehiculo", nullable = false)
+    @JsonIgnoreProperties({"ordenes", "cliente"})
     private Vehiculo vehiculo;
 
     @ManyToOne
     @JoinColumn(name = "id_trabajador", nullable = false)
+    @JsonIgnoreProperties({"contrasena", "rol", "usuario"})
     private Trabajador trabajador;
 
     @Column(columnDefinition = "TEXT")
@@ -48,10 +57,7 @@ public class OrdenReparacion {
     private EstadoRep estadoRep = EstadoRep.En_proceso;
 
     public enum EstadoRep {
-        En_proceso,
-        Completada,
-        Pausada,
-        Cancelada
+        En_proceso, Completada, Pausada, Cancelada
     }
 
     @PrePersist
@@ -64,7 +70,7 @@ public class OrdenReparacion {
         }
     }
 
-    // --- AÑADE ESTOS GETTERS PARA QUE SPRING GENERE EL JSON ---
+    // --- GETTERS ---
     public UUID getIdOr() {
         return idOr;
     }
@@ -101,7 +107,31 @@ public class OrdenReparacion {
         return estadoRep;
     }
 
-    // Setters que te faltaban
+    // --- SETTERS ---
+    public void setIdOr(UUID idOr) {
+        this.idOr = idOr;
+    }
+
+    public void setCita(Cita cita) {
+        this.cita = cita;
+    }
+
+    public void setVehiculo(Vehiculo vehiculo) {
+        this.vehiculo = vehiculo;
+    }
+
+    public void setTrabajador(Trabajador trabajador) {
+        this.trabajador = trabajador;
+    }
+
+    public void setDiagnostico(String diagnostico) {
+        this.diagnostico = diagnostico;
+    }
+
+    public void setHoras(BigDecimal horas) {
+        this.horas = horas;
+    }
+
     public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
@@ -113,9 +143,4 @@ public class OrdenReparacion {
     public void setEstadoRep(EstadoRep estadoRep) {
         this.estadoRep = estadoRep;
     }
-
-    public void setHoras(BigDecimal horas) {
-        this.horas = horas;
-    }
-
 }

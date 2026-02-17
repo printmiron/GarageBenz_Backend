@@ -18,8 +18,7 @@ public class OrdenReparacionService implements IOrdenReparacionService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<OrdenReparacion> obtenerHistorialPorCliente(String idCliente) {
-        // Usamos el método que definimos en el Repository
+    public List<OrdenReparacion> obtenerHistorialPorCliente(UUID idCliente) {
         return orRepository.findByVehiculoClienteIdClienteAndEstadoRep(
             idCliente, 
             OrdenReparacion.EstadoRep.Completada
@@ -32,11 +31,12 @@ public class OrdenReparacionService implements IOrdenReparacionService {
         return orRepository.save(orden);
     }
 
+
     @Override
     @Transactional
     public OrdenReparacion actualizarEstado(UUID idOr, OrdenReparacion.EstadoRep nuevoEstado) {
         OrdenReparacion or = orRepository.findById(idOr)
-            .orElseThrow(() -> new RuntimeException("Orden de reparación no encontrada"));
+            .orElseThrow(() -> new RuntimeException("Orden de reparación no encontrada con ID: " + idOr));
         
         or.setEstadoRep(nuevoEstado);
         return orRepository.save(or);
