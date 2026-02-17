@@ -1,22 +1,23 @@
 package com.garagebenz.demo.models;
 
-import java.util.UUID;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Vehiculos")
 public class Vehiculo {
-    
+
     @Id
-    @Column(name = "id_vehiculo", columnDefinition = "CHAR(36)", nullable = false, updatable = false)
-    private UUID idVehiculo;
+    @GeneratedValue(strategy = GenerationType.UUID) // Esto ya genera el String UUID solo
+    @Column(name = "id_vehiculo", length = 36, nullable = false, updatable = false)
+    private String idVehiculo; // Mantenlo siempre como String para MySQL
 
     @Column(nullable = false, unique = true, length = 20)
     private String matricula;
@@ -27,18 +28,62 @@ public class Vehiculo {
     @Column(nullable = false, length = 100)
     private String modelo;
 
-    @Column(name = "año", nullable = false)
-    private int anio;
+    @Column(name = "anio", nullable = false)
+    private Integer anio;
 
-    @ManyToOne
-    @JoinColumn(name = "id_cliente", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente", nullable = false)
     private Cliente cliente;
 
-    @PrePersist
-    public void prePersist() {
-        if (idVehiculo == null) {
-            idVehiculo = UUID.randomUUID();
-        }
+    // CONSTRUCTOR VACÍO (Obligatorio para JPA)
+    public Vehiculo() {}
+
+    // GETTERS Y SETTERS CORREGIDOS (Todos usan String para el ID)
+    public String getIdVehiculo() {
+        return idVehiculo;
     }
-    
+
+    public void setIdVehiculo(String idVehiculo) {
+        this.idVehiculo = idVehiculo;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public String getVin() {
+        return vin;
+    }
+
+    public void setVin(String vin) {
+        this.vin = vin;
+    }
+
+    public String getModelo() {
+        return modelo;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public Integer getAnio() {
+        return anio;
+    }
+
+    public void setAnio(Integer anio) {
+        this.anio = anio;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 }

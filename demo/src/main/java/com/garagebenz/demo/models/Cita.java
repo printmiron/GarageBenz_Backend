@@ -1,8 +1,13 @@
 package com.garagebenz.demo.models;
 
+import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
+
+import org.hibernate.annotations.JdbcTypeCode;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,15 +22,23 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Cita")
 public class Cita {
+
     @Id
+    @JdbcTypeCode(Types.VARCHAR) // <--- ESTO ARREGLA EL ERROR
     @Column(name = "id_cita", columnDefinition = "CHAR(36)")
     private UUID idCita;
 
-    @Column(name = "hora_cita", nullable = false)
-    private LocalTime horaCita;
-      @Column(name = "fecha_cita", nullable = false)
+    // El formato debe coincidir con el input type="date" de Angular (YYYY-MM-DD)
+    @Column(name = "fecha_cita", nullable = false)
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaCita;
 
+    // El formato debe coincidir con tus <option> de Angular (HH:mm)
+    @Column(name = "hora_cita", nullable = false)
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime horaCita;
+
+    @Column(columnDefinition = "TEXT")
     private String descripcion;
 
     @Enumerated(EnumType.STRING)
@@ -39,9 +52,12 @@ public class Cita {
         Cancelada
     }
 
+    // RELACIONES: Asegúrate de que los nombres de las clases (Cliente/Vehiculo)
+    // coincidan con tus archivos .java
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
     private Cliente cliente;
+
     @ManyToOne
     @JoinColumn(name = "id_vehiculo", nullable = false)
     private Vehiculo vehiculo;
@@ -53,6 +69,7 @@ public class Cita {
         }
     }
 
+    // --- GETTERS Y SETTERS ---
     public UUID getIdCita() {
         return idCita;
     }
@@ -61,20 +78,20 @@ public class Cita {
         this.idCita = idCita;
     }
 
-    public LocalTime getHoraCita() {
-        return horaCita;
-    }
-
-    public void setHoraCita(LocalTime horaCita) {
-        this.horaCita = horaCita;
-    }
-
     public LocalDate getFechaCita() {
         return fechaCita;
     }
 
     public void setFechaCita(LocalDate fechaCita) {
         this.fechaCita = fechaCita;
+    }
+
+    public LocalTime getHoraCita() {
+        return horaCita;
+    }
+
+    public void setHoraCita(LocalTime horaCita) {
+        this.horaCita = horaCita;
     }
 
     public String getDescripcion() {
@@ -108,8 +125,4 @@ public class Cita {
     public void setVehiculo(Vehiculo vehiculo) {
         this.vehiculo = vehiculo;
     }
-
-
-    
-
 }

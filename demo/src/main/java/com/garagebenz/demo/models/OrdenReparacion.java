@@ -3,7 +3,16 @@ package com.garagebenz.demo.models;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Ordenes_Reparacion")
@@ -38,7 +47,7 @@ public class OrdenReparacion {
     @Column(name = "estado_rep", nullable = false)
     private EstadoRep estadoRep = EstadoRep.En_proceso;
 
-    public enum EstadoRep {   
+    public enum EstadoRep {
         En_proceso,
         Completada,
         Pausada,
@@ -55,22 +64,58 @@ public class OrdenReparacion {
         }
     }
 
-    public void setCita(Cita cita) {
-    this.cita = cita;
+    // --- AÑADE ESTOS GETTERS PARA QUE SPRING GENERE EL JSON ---
+    public UUID getIdOr() {
+        return idOr;
     }
 
-    public void setVehiculo(Vehiculo vehiculo) {
-        this.vehiculo = vehiculo;
+    public Cita getCita() {
+        return cita;
     }
 
-    public void setTrabajador(Trabajador trabajador) {
-        this.trabajador = trabajador;
+    public Vehiculo getVehiculo() {
+        return vehiculo;
     }
 
-    public void setDiagnostico(String diagnostico) {
-        this.diagnostico = diagnostico;
+    public Trabajador getTrabajador() {
+        return trabajador;
     }
 
+    public String getDiagnostico() {
+        return diagnostico;
+    }
+
+    public BigDecimal getHoras() {
+        return horas;
+    }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin;
+    }
+
+    public EstadoRep getEstadoRep() {
+        return estadoRep;
+    }
+
+    // Setters que te faltaban
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public void setFechaFin(LocalDate fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public void setEstadoRep(EstadoRep estadoRep) {
+        this.estadoRep = estadoRep;
+    }
+
+    public void setHoras(BigDecimal horas) {
+        this.horas = horas;
+    }
 
 }
-

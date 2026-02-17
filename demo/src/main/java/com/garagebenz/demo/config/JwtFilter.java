@@ -7,82 +7,68 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.garagebenz.demo.service.CustomUserDetailsService;
+import com.garagebenz.demo.service.JwtService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@Component
+
 public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
-    private com.garagebenz.demo.service.JwtService jwtService;
+    private JwtService jwtService;
 
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
-
-        String path = request.getRequestURI();
-        // Si la ruta es de autenticación, no hacemos nada y dejamos pasar
-        if (path.contains("/auth/")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
-        final String jwt;
-        final String username;
 
-        // 1. Verificación inicial: Si no hay header, seguimos sin autenticar
-        if (authHeader == null || authHeader.isBlank()) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // 2. Extracción flexible del Token
-        if (authHeader.startsWith("Bearer ")) {
-            jwt = authHeader.substring(7);
-        } else {
-            // Esto permite que funcione si Angular envía el token "pelado"
-            jwt = authHeader;
-        }
-
+        final String jwt = authHeader.substring(7);
         try {
-            username = jwtService.extractUsername(jwt);
-        } catch (Exception e) {
-            // Si el token está mal formado o corrupto, seguimos la cadena
-            filterChain.doFilter(request, response);
-            return;
-        }
+            final String username = jwtService.extractUsername(jwt);
 
-        // 3. Validación y Autenticación en el contexto de Spring
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-            if (jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                if (jwtService.isTokenValid(jwt, userDetails)) {
+                    // 1. Creamos el token de autenticación
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
 
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                    // 2. Cargamos los detalles de la petición ANTES de setearlo
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    // 3. Lo metemos en el contexto (UNA SOLA VEZ)
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                    System.out.println(">>> AUTENTICACIÓN FIJADA para: " + username);
+                }
             }
+        } catch (Exception e) {
+            SecurityContextHolder.clearContext();
+            System.out.println("Error en JwtFilter: " + e.getMessage());
         }
 
+        // 4. Continuamos la cadena
+        System.out.println(">>> Filtro finalizado para: "
+                + (SecurityContextHolder.getContext().getAuthentication() != null ? "USUARIO IDENTIFICADO" : "NADIE"));
         filterChain.doFilter(request, response);
     }
-
 }

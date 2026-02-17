@@ -22,7 +22,7 @@ public class Rol {
     private UUID idRol;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "nombre_rol", nullable = false)
     private NombreRol nombreRol;
 
     public enum NombreRol {

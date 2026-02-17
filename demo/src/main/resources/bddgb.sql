@@ -56,7 +56,7 @@ CREATE TABLE Vehiculos (
     matricula VARCHAR(20) NOT NULL UNIQUE,
     vin VARCHAR(17) NOT NULL UNIQUE,
     modelo VARCHAR(100) NOT NULL,
-    año YEAR NOT NULL,
+    anio INT NOT NULL, 
     id_cliente CHAR(36) NOT NULL,
     PRIMARY KEY(id_vehiculo),
     CONSTRAINT fk_clienteVehiculo FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente)

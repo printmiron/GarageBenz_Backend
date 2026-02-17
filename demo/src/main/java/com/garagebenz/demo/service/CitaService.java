@@ -1,53 +1,44 @@
 package com.garagebenz.demo.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.garagebenz.demo.models.Cita;
 import com.garagebenz.demo.repository.CitaRepository;
 
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-
 @Service
 public class CitaService {
 
-    private final CitaRepository citaRepository;
+    @Autowired
+    private CitaRepository citaRepository;
 
-    
-    public CitaService(CitaRepository citaRepository) {
-        this.citaRepository = citaRepository;
+    public List<Cita> findByClienteId(String idCliente) {
+        // Buscamos a través de la relación Cliente
+        return citaRepository.findByCliente_IdCliente(UUID.fromString(idCliente));
     }
 
-    // Guardar o actualizar una cita
     public Cita save(Cita cita) {
         return citaRepository.save(cita);
     }
 
-    // Obtener todas las citas
-    public List<Cita> findAll() {
-        return citaRepository.findAll();
+    public void updateEstado(String id, String nuevoEstado) {
+        // Convertimos el String id a UUID y el String nuevoEstado al Enum
+        citaRepository.findById(UUID.fromString(id)).ifPresent(cita -> {
+            try {
+                cita.setEstado(Cita.EstadoCita.valueOf(nuevoEstado));
+                citaRepository.save(cita);
+            } catch (IllegalArgumentException e) {
+                // Manejar error si el estado enviado no existe en el Enum
+                System.out.println("Estado no válido: " + nuevoEstado);
+            }
+        });
     }
-
-    // Buscar una cita por ID
-    public Cita findById(UUID id) {
-        return citaRepository.findById(id).orElse(null);
+    
+    public Optional<Cita> findById(String id) {
+        return citaRepository.findById(UUID.fromString(id));
     }
-
-    // Eliminar una cita por ID
-    public void deleteById(UUID id) {
-        citaRepository.deleteById(id);
-    }
-
-    // Ejemplo de búsqueda por cliente
-    public List<Cita> findByClienteId(UUID clienteId) {
-        return citaRepository.findByClienteId(clienteId);
-    }
-
-    // Ejemplo de búsqueda por estado
-    public List<Cita> findByEstado(Cita.EstadoCita estado) {
-        return citaRepository.findByEstado(estado);
-    }
-
 }
