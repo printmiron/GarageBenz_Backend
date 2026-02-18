@@ -16,4 +16,10 @@ public interface OrdenReparacionRepository extends JpaRepository<OrdenReparacion
         UUID idCliente, 
         OrdenReparacion.EstadoRep estadoRep
     );
+
+    List<OrdenReparacion> findByEstadoRep(OrdenReparacion.EstadoRep estado);
+
+    boolean existsByCitaIdCita(UUID idCita);
+
+    
 }

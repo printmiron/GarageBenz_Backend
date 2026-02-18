@@ -6,9 +6,17 @@ import java.util.UUID;
 import com.garagebenz.demo.models.OrdenReparacion;
 
 public interface IOrdenReparacionService {
-    // Cambia String por UUID aquí también
-    List<OrdenReparacion> obtenerHistorialPorCliente(UUID idCliente); 
-    
+
+    List<OrdenReparacion> obtenerHistorialPorCliente(UUID idCliente);
+
     OrdenReparacion guardarOrden(OrdenReparacion orden);
+
     OrdenReparacion actualizarEstado(UUID idOr, OrdenReparacion.EstadoRep nuevoEstado);
+
+    OrdenReparacion abrirDesdeCita(UUID idCita, UUID idTrabajador);
+
+    // AÑADE ESTA LÍNEA
+    OrdenReparacion finalizarOrden(UUID id, OrdenReparacion datosNuevos);
+
+    List<OrdenReparacion> obtenerPorEstado(OrdenReparacion.EstadoRep estado);
 }

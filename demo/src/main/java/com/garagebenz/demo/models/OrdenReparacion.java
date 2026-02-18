@@ -24,7 +24,7 @@ import jakarta.persistence.Table;
 public class OrdenReparacion {
 
     @Id
-    @JdbcTypeCode(Types.VARCHAR) // <-- AÑADE ESTA LÍNEA AQUÍ
+    @JdbcTypeCode(Types.VARCHAR)
     @Column(name = "id_or", columnDefinition = "CHAR(36)", nullable = false, updatable = false)
     private UUID idOr;
 
@@ -52,12 +52,15 @@ public class OrdenReparacion {
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "estado_rep", nullable = false)
+    @Enumerated(EnumType.STRING) 
+    @Column(name = "estado_rep")
     private EstadoRep estadoRep = EstadoRep.En_proceso;
 
     public enum EstadoRep {
-        En_proceso, Completada, Pausada, Cancelada
+        En_proceso,
+        Completada,
+        Pausada,
+        Cancelada
     }
 
     @PrePersist

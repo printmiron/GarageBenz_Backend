@@ -9,6 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -57,6 +59,7 @@ public class Cliente implements UserDetails {
 
     // Dentro de Cliente.java
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         try {
             if (this.rol != null && this.rol.getNombreRol() != null) {
@@ -72,6 +75,7 @@ public class Cliente implements UserDetails {
     }
 
     @Override
+    @JsonIgnore
     public String getPassword() {
         return this.contrasena;
     }

@@ -25,4 +25,7 @@ public interface CitaRepository extends JpaRepository<Cita, UUID> {
     default Optional<Cita> findByIdString(String id) {
         return findById(UUID.fromString(id));
     }
+
+    
+    List<Cita> findByFechaCitaOrderByHoraCitaAsc(java.time.LocalDate fecha);
 }

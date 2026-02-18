@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.garagebenz.demo.models.OrdenReparacion;
 import com.garagebenz.demo.service.IOrdenReparacionService;
-import com.garagebenz.demo.service.OrdenReparacionService;
 
 @RestController
 @RequestMapping("/ordenes")
@@ -25,22 +25,32 @@ public class OrdenReparacionController {
     @Autowired
     private IOrdenReparacionService orService;
 
-    @Autowired
-    private OrdenReparacionService ordenReparacionService;
-
-
+   
 
     @GetMapping("/historial/{idCliente}")
     public ResponseEntity<List<OrdenReparacion>> getHistorial(@PathVariable String idCliente) {
-        // Convertimos el String que viene de Angular a un UUID de Java
         UUID clienteId = UUID.fromString(idCliente);
-
-        List<OrdenReparacion> historial = ordenReparacionService.obtenerHistorialPorCliente(clienteId);
+        List<OrdenReparacion> historial = orService.obtenerHistorialPorCliente(clienteId);
         return ResponseEntity.ok(historial);
     }
 
-    @PostMapping
-    public ResponseEntity<OrdenReparacion> crear(@RequestBody OrdenReparacion orden) {
-        return ResponseEntity.ok(orService.guardarOrden(orden));
+    @PostMapping("/abrir/{idCita}/{idTrabajador}")
+    public ResponseEntity<OrdenReparacion> abrirOrden(
+            @PathVariable UUID idCita,
+            @PathVariable UUID idTrabajador) {
+        return ResponseEntity.ok(orService.abrirDesdeCita(idCita, idTrabajador));
+    }
+
+    @GetMapping("/activas")
+    public ResponseEntity<List<OrdenReparacion>> getActivas() {
+        // CAMBIO AQUÍ: Usamos orService y el nombre del método de la interfaz
+        return ResponseEntity.ok(orService.obtenerPorEstado(OrdenReparacion.EstadoRep.En_proceso));
+    }
+
+    @PutMapping("/actualizar/{id}")
+    public ResponseEntity<OrdenReparacion> actualizar(
+            @PathVariable UUID id,
+            @RequestBody OrdenReparacion ordenData) {
+        return ResponseEntity.ok(orService.finalizarOrden(id, ordenData));
     }
 }

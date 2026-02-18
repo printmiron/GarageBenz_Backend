@@ -1,5 +1,6 @@
 package com.garagebenz.demo.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,8 +38,13 @@ public class CitaService {
             }
         });
     }
-    
+
     public Optional<Cita> findById(String id) {
         return citaRepository.findById(UUID.fromString(id));
+    }
+
+    public List<Cita> findCitasHoy() {
+        // Usamos el método que ya tienes en el repositorio
+        return citaRepository.findByFechaCitaOrderByHoraCitaAsc(LocalDate.now());
     }
 }

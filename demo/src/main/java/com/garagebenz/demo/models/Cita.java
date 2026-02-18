@@ -45,11 +45,9 @@ public class Cita {
     @Column(nullable = false)
     private EstadoCita estado = EstadoCita.Pendiente;
 
+   
     public enum EstadoCita {
-        Pendiente,
-        Confirmada,
-        Completada,
-        Cancelada
+        Pendiente, Confirmada, En_proceso, Completada, Cancelada
     }
 
     // RELACIONES: Asegúrate de que los nombres de las clases (Cliente/Vehiculo)
