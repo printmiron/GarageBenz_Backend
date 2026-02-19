@@ -1,5 +1,6 @@
 package com.garagebenz.demo.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import com.garagebenz.demo.repository.StockRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class StockService {
+public class StockService implements IStockService { // <--- IMPORTANTE: Implementar la interfaz
 
     @Autowired
     private StockRepository stockRepository;
@@ -22,9 +23,9 @@ public class StockService {
     @Autowired
     private OrdenesPiezaRepository ordenesPiezaRepository;
 
+    @Override
     @Transactional
     public void consumirPieza(UUID idOr, UUID idPieza, int cantidad) {
-        // 1. Buscar stock (usando el método corregido del repositorio anterior)
         Stock stock = stockRepository.findByPiezaIdPieza(idPieza)
                 .orElseThrow(() -> new RuntimeException("No existe stock para la pieza"));
 
@@ -32,19 +33,33 @@ public class StockService {
             throw new RuntimeException("Stock insuficiente");
         }
 
-        // 2. Restar stock
         stock.setCantidad(stock.getCantidad() - cantidad);
         stockRepository.save(stock);
 
-        // 3. Registrar en la tabla intermedia (CORRECCIÓN AQUÍ)
         OrdenesPieza detalle = new OrdenesPieza();
-
-        // Creamos el ID compuesto con los dos UUIDs
         OrdenesPiezaId idCompuesto = new OrdenesPiezaId(idOr, idPieza);
-        detalle.setId(idCompuesto); // Ahora usamos setId() con el objeto ID
-
+        detalle.setId(idCompuesto);
         detalle.setCantidadUsada(cantidad);
 
         ordenesPiezaRepository.save(detalle);
+    }
+
+    @Override
+    @Transactional
+    public void sumarStock(UUID idPieza, Integer cantidad) {
+        // Buscamos el registro de stock por el ID de la pieza
+        Stock stock = stockRepository.findByPiezaIdPieza(idPieza)
+                .orElseThrow(() -> new RuntimeException("Error: No se encontró registro de stock para esta pieza"));
+
+        // Sumamos la nueva cantidad
+        stock.setCantidad(stock.getCantidad() + cantidad);
+        
+        // Guardamos los cambios
+        stockRepository.save(stock);
+    }
+
+    @Override
+    public List<Stock> listarStock() {
+        return stockRepository.findAll();
     }
 }

@@ -1,5 +1,6 @@
 package com.garagebenz.demo.models;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.hibernate.annotations.JdbcTypeCode;
@@ -16,7 +17,7 @@ import jakarta.persistence.Table;
 public class Piezas {
 
     @Id
-    @JdbcTypeCode(SqlTypes.CHAR) 
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(name = "id_pieza", columnDefinition = "CHAR(36)", nullable = false, updatable = false)
     private UUID idPieza;
 
@@ -25,6 +26,9 @@ public class Piezas {
 
     @Column(columnDefinition = "TEXT")
     private String descripcion;
+
+    @Column(name = "precio", precision = 10, scale = 2)
+    private BigDecimal precio;
 
     @PrePersist
     public void prePersist() {
@@ -55,6 +59,14 @@ public class Piezas {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(BigDecimal precio) {
+        this.precio = precio;
     }
 
 }

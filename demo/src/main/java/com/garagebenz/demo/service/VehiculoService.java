@@ -22,7 +22,7 @@ public class VehiculoService {
 
     public Optional<Vehiculo> findById(String id) {
         // Convertimos el String a UUID para el repositorio
-        return vehiculoRepository.findById(UUID.fromString(id));
+        return vehiculoRepository.findById(id);
     }
 
     public List<Vehiculo> findByClienteId(String idCliente) {
@@ -35,6 +35,6 @@ public class VehiculoService {
     }
 
     public void deleteById(String id) {
-        vehiculoRepository.deleteById(UUID.fromString(id));
+        vehiculoRepository.deleteById(id);
     }
 }

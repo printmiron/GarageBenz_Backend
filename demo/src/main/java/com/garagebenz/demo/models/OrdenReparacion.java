@@ -3,6 +3,7 @@ package com.garagebenz.demo.models;
 import java.math.BigDecimal;
 import java.sql.Types;
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.hibernate.annotations.JdbcTypeCode;
@@ -145,5 +146,10 @@ public class OrdenReparacion {
 
     public void setEstadoRep(EstadoRep estadoRep) {
         this.estadoRep = estadoRep;
+    }
+
+    public Optional<Piezas> findById(UUID idOr2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 }

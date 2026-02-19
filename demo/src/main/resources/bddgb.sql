@@ -67,7 +67,7 @@ CREATE TABLE Cita (
     fecha_cita DATE NOT NULL,
     hora_cita TIME NOT NULL,
     descripcion TEXT,
-    estado ENUM('Pendiente', 'Confirmada', 'Completada', 'Cancelada') NOT NULL DEFAULT 'Pendiente',
+    estado ENUM('Pendiente', 'Confirmada', 'En_proceso', 'Completada', 'Cancelada') NOT NULL DEFAULT 'Pendiente',
     id_cliente CHAR(36) NOT NULL,
     id_vehiculo CHAR(36) NOT NULL,
     PRIMARY KEY(id_cita),
@@ -84,7 +84,8 @@ CREATE TABLE Ordenes_Reparacion (
     horas DECIMAL(5,2),
     fecha_inicio DATE,
     fecha_fin DATE,
-    estado_rep ENUM('En proceso', 'Completada', 'Pausada', 'Cancelada') NOT NULL DEFAULT 'En proceso',
+    -- Corregido: 'En_proceso' en lugar de 'En proceso' para evitar errores de truncado
+    estado_rep ENUM('En_proceso', 'Completada', 'Pausada', 'Cancelada') NOT NULL DEFAULT 'En_proceso',
     PRIMARY KEY(id_or),
     CONSTRAINT fk_citaOrden FOREIGN KEY (id_cita) REFERENCES Cita(id_cita),
     CONSTRAINT fk_vehiculoOrden FOREIGN KEY (id_vehiculo) REFERENCES Vehiculos(id_vehiculo),
@@ -94,7 +95,8 @@ CREATE TABLE Ordenes_Reparacion (
 CREATE TABLE Piezas (
     id_pieza CHAR(36) NOT NULL,
     Nombre VARCHAR(150) NOT NULL,
-    Descripcion TEXT,  
+    Descripcion TEXT,
+    precio DECIMAL (10 ,2),
     PRIMARY KEY(id_pieza)
 );
 
@@ -118,20 +120,20 @@ CREATE TABLE Ordenes_Pieza (
 
 
 
-SET FOREIGN_KEY_CHECKS = 0; -- Desactiva temporalmente las restricciones de llave foránea
+ -- SET FOREIGN_KEY_CHECKS = 0; -- Desactiva temporalmente las restricciones de llave foránea
 
-TRUNCATE TABLE Ordenes_Pieza;
-TRUNCATE TABLE Stock;
-TRUNCATE TABLE Piezas;
-TRUNCATE TABLE Ordenes_Reparacion;
-TRUNCATE TABLE Cita;
-TRUNCATE TABLE Vehiculos;
-TRUNCATE TABLE Administrador;
-TRUNCATE TABLE Trabajador;
-TRUNCATE TABLE Cliente;
-TRUNCATE TABLE Rol;
-
-SET FOREIGN_KEY_CHECKS = 1; -- Vuelve a activar las restricciones
+-- TRUNCATE TABLE Ordenes_Pieza;
+-- TRUNCATE TABLE Stock;
+-- TRUNCATE TABLE Piezas;
+-- TRUNCATE TABLE Ordenes_Reparacion;
+-- TRUNCATE TABLE Cita;
+-- TRUNCATE TABLE Vehiculos;
+-- TRUNCATE TABLE Administrador;
+-- TRUNCATE TABLE Trabajador;
+-- TRUNCATE TABLE Cliente;
+-- TRUNCATE TABLE Rol;
+	
+-- SET FOREIGN_KEY_CHECKS = 1; -- Vuelve a activar las restricciones
 
 INSERT INTO Rol (id_rol, nombre_rol) VALUES 
 ('e3b0c442-98fc-11ee-b9d1-0242ac120002', 'Cliente'),

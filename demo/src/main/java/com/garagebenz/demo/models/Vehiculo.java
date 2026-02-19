@@ -15,9 +15,9 @@ import jakarta.persistence.Table;
 public class Vehiculo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID) // Esto ya genera el String UUID solo
+    @GeneratedValue(strategy = GenerationType.UUID) 
     @Column(name = "id_vehiculo", length = 36, nullable = false, updatable = false)
-    private String idVehiculo; // Mantenlo siempre como String para MySQL
+    private String idVehiculo; 
 
     @Column(nullable = false, unique = true, length = 20)
     private String matricula;

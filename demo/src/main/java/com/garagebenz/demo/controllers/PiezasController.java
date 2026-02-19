@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.garagebenz.demo.dto.PiezaCrearDTO;
 import com.garagebenz.demo.models.Piezas;
-import com.garagebenz.demo.service.IPiezasService;
+import com.garagebenz.demo.service.PiezasService;
 
 @RestController
 @RequestMapping("/piezas")
@@ -21,7 +22,7 @@ import com.garagebenz.demo.service.IPiezasService;
 public class PiezasController {
 
     @Autowired
-    private IPiezasService piezasService;
+    private PiezasService piezasService;
 
     // Obtener todas las piezas
     @GetMapping
@@ -29,10 +30,9 @@ public class PiezasController {
         return piezasService.listarTodas();
     }
 
-    // Crear una nueva pieza (Este es el que usarás en Postman)
-    @PostMapping
-    public ResponseEntity<Piezas> crear(@RequestBody Piezas pieza) {
-        Piezas nuevaPieza = piezasService.guardar(pieza);
+    @PostMapping("/crear") 
+    public ResponseEntity<Piezas> crearConStock(@RequestBody PiezaCrearDTO dto) {
+        Piezas nuevaPieza = piezasService.crearPiezaConStock(dto);
         return new ResponseEntity<>(nuevaPieza, HttpStatus.CREATED);
     }
 

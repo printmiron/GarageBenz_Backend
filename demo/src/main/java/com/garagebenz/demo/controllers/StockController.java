@@ -1,6 +1,7 @@
 package com.garagebenz.demo.controllers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,14 +10,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.garagebenz.demo.models.OrdenReparacion;
+import com.garagebenz.demo.models.OrdenesPieza;
+import com.garagebenz.demo.models.OrdenesPiezaId;
+import com.garagebenz.demo.models.Piezas;
 import com.garagebenz.demo.models.Stock;
+import com.garagebenz.demo.repository.OrdenReparacionRepository;
+import com.garagebenz.demo.repository.OrdenesPiezaRepository;
+import com.garagebenz.demo.repository.PiezasRepository;
 import com.garagebenz.demo.repository.StockRepository;
-import com.garagebenz.demo.service.StockService;
+import com.garagebenz.demo.service.IStockService;
 
 @RestController
 @RequestMapping("/stock")
@@ -25,9 +34,18 @@ public class StockController {
 
     @Autowired
     private StockRepository stockRepository;
-    
+
     @Autowired
-    private StockService stockService;
+    private IStockService stockService;
+
+    @Autowired
+    private OrdenReparacionRepository ordenRepo;
+
+    @Autowired
+    private PiezasRepository piezasRepo;
+
+    @Autowired
+    private OrdenesPiezaRepository ordenesPiezaRepo;
 
     @GetMapping
     public List<Stock> getAllStock() {
@@ -42,14 +60,42 @@ public class StockController {
     }
 
     @PostMapping("/consumir")
-    public ResponseEntity<?> consumirPieza(@RequestParam UUID idOr,
+    public ResponseEntity<?> consumirStock(
+            @RequestParam UUID idOr,
             @RequestParam UUID idPieza,
             @RequestParam int cantidad) {
-        try {
-            stockService.consumirPieza(idOr, idPieza, cantidad);
-            return ResponseEntity.ok().body("Pieza añadida a la orden y stock actualizado");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+
+        // Ahora esto NO puede fallar, porque ordenRepo es el Repository
+        OrdenReparacion orden = ordenRepo.findById(idOr)
+                .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + idOr));
+
+        Piezas piezas = piezasRepo.findById(idPieza)
+                .orElseThrow(() -> new RuntimeException("Pieza no encontrada con ID: " + idPieza));
+
+        // Construcción del objeto de relación
+        OrdenesPiezaId idCompuesto = new OrdenesPiezaId(idOr, idPieza);
+
+        OrdenesPieza registro = new OrdenesPieza();
+        registro.setId(idCompuesto);
+        registro.setOrden(orden);
+        registro.setPieza(piezas);
+        registro.setCantidadUsada(cantidad);
+
+        // Guardado final
+        ordenesPiezaRepo.save(registro);
+
+        return ResponseEntity.ok("Operación exitosa: Pieza vinculada a la orden.");
+    }
+
+    // En StockController.java
+    @PutMapping("/reponer")
+    public ResponseEntity<?> reponerStock(@RequestBody Map<String, Object> payload) {
+        // El "idPieza" viene de Angular como String, lo pasamos a UUID
+        UUID idPieza = UUID.fromString(payload.get("idPieza").toString());
+        // La "cantidad" viene como número
+        Integer cantidad = Integer.parseInt(payload.get("cantidad").toString());
+
+        stockService.sumarStock(idPieza, cantidad);
+        return ResponseEntity.ok().build();
     }
 }
