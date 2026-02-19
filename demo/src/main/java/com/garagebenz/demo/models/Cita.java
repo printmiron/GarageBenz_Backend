@@ -3,12 +3,16 @@ package com.garagebenz.demo.models;
 import java.sql.Types;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.JdbcTypeCode;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,6 +20,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
@@ -24,16 +29,14 @@ import jakarta.persistence.Table;
 public class Cita {
 
     @Id
-    @JdbcTypeCode(Types.VARCHAR) // <--- ESTO ARREGLA EL ERROR
+    @JdbcTypeCode(Types.VARCHAR)
     @Column(name = "id_cita", columnDefinition = "CHAR(36)")
     private UUID idCita;
 
-    // El formato debe coincidir con el input type="date" de Angular (YYYY-MM-DD)
     @Column(name = "fecha_cita", nullable = false)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaCita;
 
-    // El formato debe coincidir con tus <option> de Angular (HH:mm)
     @Column(name = "hora_cita", nullable = false)
     @JsonFormat(pattern = "HH:mm")
     private LocalTime horaCita;
@@ -45,20 +48,23 @@ public class Cita {
     @Column(nullable = false)
     private EstadoCita estado = EstadoCita.Pendiente;
 
-   
     public enum EstadoCita {
         Pendiente, Confirmada, En_proceso, Completada, Cancelada
     }
 
-    // RELACIONES: Asegúrate de que los nombres de las clases (Cliente/Vehiculo)
-    // coincidan con tus archivos .java
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
+    @JsonIgnoreProperties({"citas", "vehiculos", "password", "usuario"}) // Evita bucle con Cliente
     private Cliente cliente;
 
     @ManyToOne
     @JoinColumn(name = "id_vehiculo", nullable = false)
+    @JsonIgnoreProperties({"cliente", "ordenes", "citas"}) // Evita bucle con Vehiculo
     private Vehiculo vehiculo;
+
+    @OneToMany(mappedBy = "cita", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore // No queremos listar todas las órdenes al ver una cita individual en este flujo
+    private List<OrdenReparacion> ordenes;
 
     @PrePersist
     public void prePersist() {
@@ -122,5 +128,13 @@ public class Cita {
 
     public void setVehiculo(Vehiculo vehiculo) {
         this.vehiculo = vehiculo;
+    }
+
+    public List<OrdenReparacion> getOrdenes() {
+        return ordenes;
+    }
+
+    public void setOrdenes(List<OrdenReparacion> ordenes) {
+        this.ordenes = ordenes;
     }
 }

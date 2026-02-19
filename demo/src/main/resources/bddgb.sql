@@ -117,6 +117,20 @@ CREATE TABLE Ordenes_Pieza (
     CONSTRAINT fk_piezaOrden FOREIGN KEY (id_pieza) REFERENCES Piezas(id_pieza)
 );
 
+CREATE TABLE Facturas (
+    id_factura BIGINT AUTO_INCREMENT PRIMARY KEY,
+    numero_factura VARCHAR(50) NOT NULL UNIQUE,
+    fecha_emision DATE NOT NULL,
+    total_piezas DECIMAL(10,2) DEFAULT 0,
+    total_mano_obra DECIMAL(10,2) DEFAULT 0,
+    total_iva DECIMAL(10,2) DEFAULT 0,
+    importe_total DECIMAL(10,2) DEFAULT 0,
+    id_or CHAR(36) NOT NULL, -- CAMBIADO A CHAR(36) PARA COINCIDIR
+    UNIQUE (id_or),
+    CONSTRAINT fk_factura_orden FOREIGN KEY (id_or) 
+        REFERENCES Ordenes_Reparacion(id_or) 
+        ON DELETE CASCADE
+) ENGINE=InnoDB;
 
 
 

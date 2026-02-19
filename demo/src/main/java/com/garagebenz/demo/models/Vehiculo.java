@@ -1,5 +1,7 @@
 package com.garagebenz.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,6 +34,7 @@ public class Vehiculo {
     private Integer anio;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente", nullable = false)
     private Cliente cliente;
 

@@ -11,11 +11,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
@@ -45,6 +47,12 @@ public class Cliente implements UserDetails {
 
     @Column(name = "contraseña", nullable = false)
     private String contrasena;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cita> citas;
+
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vehiculo> vehiculos;
 
     @ManyToOne
     @JoinColumn(name = "id_rol", nullable = false)
@@ -78,6 +86,22 @@ public class Cliente implements UserDetails {
     @JsonIgnore
     public String getPassword() {
         return this.contrasena;
+    }
+
+    public List<Cita> getCitas() {
+        return citas;
+    }
+
+    public void setCitas(List<Cita> citas) {
+        this.citas = citas;
+    }
+
+    public List<Vehiculo> getVehiculos() {
+        return vehiculos;
+    }
+
+    public void setVehiculos(List<Vehiculo> vehiculos) {
+        this.vehiculos = vehiculos;
     }
 
     @Override
