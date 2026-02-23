@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.garagebenz.demo.models.Factura;
-import com.garagebenz.demo.models.OrdenReparacion;
 import com.garagebenz.demo.repository.FacturaRepository;
 import com.garagebenz.demo.repository.OrdenReparacionRepository;
 import com.garagebenz.demo.service.FacturaService;
 
 @RestController
 @RequestMapping("/facturas")
-@CrossOrigin(origins = "http://localhost:4200") 
+@CrossOrigin(origins = "http://localhost:4200")
 public class FacturaController {
 
     @Autowired
@@ -35,14 +34,8 @@ public class FacturaController {
 
     // 1. GENERAR FACTURA: Cierra una orden y crea la factura
     @PostMapping("/generar/{idOr}")
-    public ResponseEntity<Factura> crearFactura(@PathVariable String idOr) {
-        // Convertimos el String a UUID aquí mismo
-        UUID uuidOr = UUID.fromString(idOr);
-
-        OrdenReparacion or = ordenRepo.findById(uuidOr)
-                .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + idOr));
-
-        return ResponseEntity.ok(facturaService.generarFactura(or));
+    public ResponseEntity<Factura> crearFactura(@PathVariable UUID idOr) {
+        return ResponseEntity.ok(facturaService.generarFactura(idOr));
     }
 
     // 2. LISTAR TODAS: Para que el admin vea el historial

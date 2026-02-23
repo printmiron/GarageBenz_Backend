@@ -58,8 +58,8 @@ public class OrdenReparacionService implements IOrdenReparacionService {
     }
 
     /**
-     * PASO 1: Abrir la orden desde la agenda.
-     * La Cita pasa a 'En_proceso' (Visibilidad para el cliente).
+     * PASO 1: Abrir la orden desde la agenda. La Cita pasa a 'En_proceso'
+     * (Visibilidad para el cliente).
      */
     @Override
     @Transactional
@@ -91,8 +91,8 @@ public class OrdenReparacionService implements IOrdenReparacionService {
     }
 
     /**
-     * PASO 2: Finalizar el trabajo desde el panel de órdenes.
-     * La Cita pasa a 'Completada' definitivamente.
+     * PASO 2: Finalizar el trabajo desde el panel de órdenes. La Cita pasa a
+     * 'Completada' definitivamente.
      */
     @Override
     @Transactional
@@ -106,11 +106,15 @@ public class OrdenReparacionService implements IOrdenReparacionService {
         or.setHoras(datosNuevos.getHoras());
         or.setEstadoRep(OrdenReparacion.EstadoRep.Completada);
 
+        // --- AQUÍ DEBES PONER LA FECHA ---
+        or.setFechaFin(LocalDate.now()); 
+        // ---------------------------------
+
         // 3. Cambiar estado de la Cita vinculada a COMPLETADA
         if (or.getCita() != null) {
             Cita citaAsociada = or.getCita();
             citaAsociada.setEstado(Cita.EstadoCita.Completada);
-            citaRepository.save(citaAsociada); // Persistimos el cambio en la cita
+            citaRepository.save(citaAsociada);
         }
 
         return orRepository.save(or);

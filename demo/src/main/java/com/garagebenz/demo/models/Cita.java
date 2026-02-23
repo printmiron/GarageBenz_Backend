@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.hibernate.annotations.JdbcTypeCode;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -54,12 +55,12 @@ public class Cita {
 
     @ManyToOne
     @JoinColumn(name = "id_cliente", nullable = false)
-    @JsonIgnoreProperties({"citas", "vehiculos", "password", "usuario"}) // Evita bucle con Cliente
+    @JsonBackReference(value = "cliente-cita")
     private Cliente cliente;
 
     @ManyToOne
     @JoinColumn(name = "id_vehiculo", nullable = false)
-    @JsonIgnoreProperties({"cliente", "ordenes", "citas"}) // Evita bucle con Vehiculo
+    @JsonIgnoreProperties({"cliente", "citas"})
     private Vehiculo vehiculo;
 
     @OneToMany(mappedBy = "cita", cascade = CascadeType.ALL, orphanRemoval = true)

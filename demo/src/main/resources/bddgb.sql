@@ -134,13 +134,13 @@ CREATE TABLE Facturas (
 
 
 
- -- SET FOREIGN_KEY_CHECKS = 0; -- Desactiva temporalmente las restricciones de llave foránea
+-- SET FOREIGN_KEY_CHECKS = 0; -- Desactiva temporalmente las restricciones de llave foránea
 
 -- TRUNCATE TABLE Ordenes_Pieza;
 -- TRUNCATE TABLE Stock;
 -- TRUNCATE TABLE Piezas;
 -- TRUNCATE TABLE Ordenes_Reparacion;
--- TRUNCATE TABLE Cita;
+ -- TRUNCATE TABLE Cita;
 -- TRUNCATE TABLE Vehiculos;
 -- TRUNCATE TABLE Administrador;
 -- TRUNCATE TABLE Trabajador;

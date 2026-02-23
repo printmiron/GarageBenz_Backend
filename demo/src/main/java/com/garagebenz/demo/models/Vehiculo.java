@@ -1,6 +1,6 @@
 package com.garagebenz.demo.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,8 +34,8 @@ public class Vehiculo {
     private Integer anio;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
     @JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente", nullable = false)
+    @JsonBackReference(value = "cliente-vehiculo")
     private Cliente cliente;
 
     // CONSTRUCTOR VACÍO (Obligatorio para JPA)
