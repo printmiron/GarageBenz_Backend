@@ -33,9 +33,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                // ESTA LÍNEA ES VITAL:
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                // Permitimos las dos variantes por si acaso
                 .requestMatchers("/api/auth/**", "/auth/**").permitAll()
                 .anyRequest().authenticated()
                 )
