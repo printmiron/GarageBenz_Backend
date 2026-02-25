@@ -9,7 +9,7 @@ public class AuthResponseDTO {
     private String nombreUsuario;
     private Map<String, Object> user; // <--- AÑADE ESTO
 
-    // Getters y Setters...
+
     public Map<String, Object> getUser() { return user; }
     public void setUser(Map<String, Object> user) { this.user = user; }
     public String getToken() {

@@ -15,7 +15,6 @@ public interface IOrdenReparacionService {
 
     OrdenReparacion abrirDesdeCita(UUID idCita, UUID idTrabajador);
 
-    // AÑADE ESTA LÍNEA
     OrdenReparacion finalizarOrden(UUID id, OrdenReparacion datosNuevos);
 
     List<OrdenReparacion> obtenerPorEstado(OrdenReparacion.EstadoRep estado);

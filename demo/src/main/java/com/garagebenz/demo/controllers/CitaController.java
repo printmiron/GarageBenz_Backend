@@ -51,7 +51,7 @@ public class CitaController {
         return ResponseEntity.ok(citas);
     }
 
-    // En tu Controller
+  
     @GetMapping("/por-fecha/{fecha}")
     public ResponseEntity<List<Cita>> getCitasPorFecha(@PathVariable String fecha) {
         // Esto aceptará "2026-02-18" desde la URL

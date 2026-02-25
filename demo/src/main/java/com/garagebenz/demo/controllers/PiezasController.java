@@ -24,7 +24,7 @@ public class PiezasController {
     @Autowired
     private PiezasService piezasService;
 
-    // Obtener todas las piezas
+
     @GetMapping
     public List<Piezas> listar() {
         return piezasService.listarTodas();

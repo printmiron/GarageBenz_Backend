@@ -21,12 +21,12 @@ public class VehiculoService {
     }
 
     public Optional<Vehiculo> findById(String id) {
-        // Convertimos el String a UUID para el repositorio
+
         return vehiculoRepository.findById(id);
     }
 
     public List<Vehiculo> findByClienteId(String idCliente) {
-        // Usamos el método de navegación: Cliente -> idCliente
+    
         return vehiculoRepository.findByCliente_IdCliente(UUID.fromString(idCliente));
     }
 

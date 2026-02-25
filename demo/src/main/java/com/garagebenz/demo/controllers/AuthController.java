@@ -20,7 +20,7 @@ import com.garagebenz.demo.service.AuthService;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "http://localhost:4200") // Para que Angular no te de problemas de CORS
+@CrossOrigin(origins = "http://localhost:4200") 
 public class AuthController {
 
     @Autowired
@@ -40,8 +40,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        // 1. Aquí está tu TOKEN REAL guardado en esta variable
-        // IMPORTANTE: Cambia 'Object' por el tipo de clase que devuelve tu service (ej: AuthResponseDTO)
+   
         com.garagebenz.demo.dto.AuthResponseDTO authData = authService.login(request);
 
         Optional<Cliente> clienteOpt = clienteRepository.findByUsuario(request.getUsuario());
@@ -50,13 +49,12 @@ public class AuthController {
             Cliente cliente = clienteOpt.get();
             Map<String, Object> finalResponse = new HashMap<>();
 
-            // 2. ¡AQUÍ ESTÁ EL TRUCO! 
-            // Usamos el token real que viene de authData
+           
             finalResponse.put("token", authData.getToken());
             finalResponse.put("id", cliente.getIdCliente());
             finalResponse.put("rol", (cliente.getRol() != null) ? cliente.getRol().getNombreRol().toString() : "CLIENTE");
 
-            // 3. El objeto para el perfil
+          
             Map<String, Object> userProfile = new HashMap<>();
             userProfile.put("id", cliente.getIdCliente());
             userProfile.put("nombre", cliente.getNombre());

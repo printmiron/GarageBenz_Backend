@@ -40,35 +40,35 @@ public class AuthService {
         String username = request.getUsuario();
         String passwordEnviada = request.getContrasena();
 
-        // 1. Buscar en Clientes
+
         var clienteOpt = clienteRepo.findByUsuario(username);
         if (clienteOpt.isPresent()) {
             Cliente c = clienteOpt.get();
             if (passwordEncoder.matches(passwordEnviada, c.getContrasena().trim())) {
                 String rolReal = c.getRol().getNombreRol().name();
-                // PASAMOS EL OBJETO 'c' COMPLETO
+            
                 return buildResponse(c, username, rolReal);
             }
         }
 
-        // 2. Buscar en Trabajador
+      
         var trabajadorOpt = trabajadorRepo.findByUsuario(username);
         if (trabajadorOpt.isPresent()) {
             Trabajador t = trabajadorOpt.get();
             if (passwordEncoder.matches(passwordEnviada, t.getContrasena().trim())) {
                 String rolReal = t.getRol().getNombreRol().name();
-                // PASAMOS EL OBJETO 't' COMPLETO
+           
                 return buildResponse(t, username, rolReal);
             }
         }
 
-        // 3. Buscar en Administrador
+     
         var adminOpt = adminRepo.findByUsuario(username);
         if (adminOpt.isPresent()) {
             Administrador a = adminOpt.get();
             if (passwordEncoder.matches(passwordEnviada, a.getContrasena().trim())) {
                 String rolReal = a.getRol().getNombreRol().name();
-                // PASAMOS EL OBJETO 'a' COMPLETO
+      
                 return buildResponse(a, username, rolReal);
             }
         }
@@ -77,27 +77,27 @@ public class AuthService {
     }
 
     private AuthResponseDTO buildResponse(String id, String usuario, String rol, String nombre) {
-        String token = jwtService.generateToken(usuario, rol); // Generamos el JWT
+        String token = jwtService.generateToken(usuario, rol); 
 
         AuthResponseDTO dto = new AuthResponseDTO();
         dto.setToken(token);
         dto.setId(id);
-        dto.setRol(rol); // Esto es lo que Angular recibe y pone en minúsculas
+        dto.setRol(rol); 
         dto.setNombreUsuario(nombre);
         return dto;
     }
 
     public String registrarCliente(RegisterRequest request) {
-        // 1. Buscamos el objeto Rol primero para saber qué estamos registrando
+      
         UUID uuidRol = UUID.fromString(request.getId_rol());
         Rol rol = rolRepo.findById(uuidRol)
                 .orElseThrow(() -> new RuntimeException("Rol no encontrado"));
 
-        String nombreRol = rol.getNombreRol().name(); // Esto devolverá 'Cliente', 'Trabajador' o 'Administrador'
+        String nombreRol = rol.getNombreRol().name(); 
         String passwordHaseada = passwordEncoder.encode(request.getContrasena());
         UUID nuevoId = UUID.randomUUID();
 
-        // 2. Lógica de guardado según el nombre del rol
+
         if (nombreRol.equalsIgnoreCase("Trabajador")) {
             com.garagebenz.demo.models.Trabajador t = new com.garagebenz.demo.models.Trabajador();
             t.setIdTrabajador(nuevoId);
@@ -140,7 +140,7 @@ public class AuthService {
         }
     }
 
-    // Tu método buildResponse que ya tienes está perfecto, solo asegúrate de que use Object
+
     private AuthResponseDTO buildResponse(Object userEntity, String usuario, String rol) {
         String token = jwtService.generateToken(usuario, rol);
         AuthResponseDTO dto = new AuthResponseDTO();
@@ -175,8 +175,8 @@ public class AuthService {
         userData.put("usuario", usuario);
         userData.put("rol", rol.toLowerCase());
 
-        dto.setUser(userData); // Asegúrate de que el DTO tenga este campo
-        dto.setId(userData.get("id").toString()); // Para no romper lo que ya tenías
+        dto.setUser(userData);
+        dto.setId(userData.get("id").toString());
         dto.setNombreUsuario(usuario);
 
         return dto;

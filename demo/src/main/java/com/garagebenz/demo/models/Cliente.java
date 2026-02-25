@@ -23,7 +23,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "cliente") // Recomendado en minúsculas para evitar problemas de compatibilidad
+@Table(name = "cliente") 
 public class Cliente implements UserDetails {
 
     @Id
@@ -68,20 +68,20 @@ public class Cliente implements UserDetails {
         }
     }
 
-    // Dentro de Cliente.java
+  
     @Override
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         try {
             if (this.rol != null && this.rol.getNombreRol() != null) {
-                // Convertimos el Enum a String y le ponemos el prefijo ROLE_
+                
                 String authority = "ROLE_" + this.rol.getNombreRol().name();
                 return List.of(new SimpleGrantedAuthority(authority));
             }
         } catch (Exception e) {
             System.out.println("Error obteniendo roles: " + e.getMessage());
         }
-        // Si no hay rol, devolvemos un rol básico para que no de error de "Full authentication"
+      
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 

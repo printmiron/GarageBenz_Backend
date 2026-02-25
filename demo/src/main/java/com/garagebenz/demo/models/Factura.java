@@ -34,7 +34,7 @@ public class Factura {
     @Column(name = "total_mano_obra")
     private Double totalManoObra;
 
-    @Column(name = "total_iva") 
+    @Column(name = "total_iva")
     private Double totalIVA;
 
     @Column(name = "importe_total")
@@ -42,32 +42,70 @@ public class Factura {
 
     @OneToOne
     @JoinColumn(name = "id_or", referencedColumnName = "id_or")
-    @JsonManagedReference 
+    @JsonManagedReference
     private OrdenReparacion ordenReparacion;
 
-    // --- GETTERS Y SETTERS ---
+    public Long getIdFactura() {
+        return idFactura;
+    }
 
-    public Long getIdFactura() { return idFactura; }
-    public void setIdFactura(Long idFactura) { this.idFactura = idFactura; }
+    public void setIdFactura(Long idFactura) {
+        this.idFactura = idFactura;
+    }
 
-    public String getNumeroFactura() { return numeroFactura; }
-    public void setNumeroFactura(String numeroFactura) { this.numeroFactura = numeroFactura; }
+    public String getNumeroFactura() {
+        return numeroFactura;
+    }
 
-    public LocalDate getFechaEmision() { return fechaEmision; }
-    public void setFechaEmision(LocalDate fechaEmision) { this.fechaEmision = fechaEmision; }
+    public void setNumeroFactura(String numeroFactura) {
+        this.numeroFactura = numeroFactura;
+    }
 
-    public Double getTotalPiezas() { return totalPiezas; }
-    public void setTotalPiezas(Double totalPiezas) { this.totalPiezas = totalPiezas; }
+    public LocalDate getFechaEmision() {
+        return fechaEmision;
+    }
 
-    public Double getTotalManoObra() { return totalManoObra; }
-    public void setTotalManoObra(Double totalManoObra) { this.totalManoObra = totalManoObra; }
+    public void setFechaEmision(LocalDate fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
 
-    public Double getTotalIVA() { return totalIVA; }
-    public void setTotalIVA(Double totalIVA) { this.totalIVA = totalIVA; }
+    public Double getTotalPiezas() {
+        return totalPiezas;
+    }
 
-    public Double getImporteTotal() { return importeTotal; }
-    public void setImporteTotal(Double importeTotal) { this.importeTotal = importeTotal; }
+    public void setTotalPiezas(Double totalPiezas) {
+        this.totalPiezas = totalPiezas;
+    }
 
-    public OrdenReparacion getOrdenReparacion() { return ordenReparacion; }
-    public void setOrdenReparacion(OrdenReparacion ordenReparacion) { this.ordenReparacion = ordenReparacion; }
+    public Double getTotalManoObra() {
+        return totalManoObra;
+    }
+
+    public void setTotalManoObra(Double totalManoObra) {
+        this.totalManoObra = totalManoObra;
+    }
+
+    public Double getTotalIVA() {
+        return totalIVA;
+    }
+
+    public void setTotalIVA(Double totalIVA) {
+        this.totalIVA = totalIVA;
+    }
+
+    public Double getImporteTotal() {
+        return importeTotal;
+    }
+
+    public void setImporteTotal(Double importeTotal) {
+        this.importeTotal = importeTotal;
+    }
+
+    public OrdenReparacion getOrdenReparacion() {
+        return ordenReparacion;
+    }
+
+    public void setOrdenReparacion(OrdenReparacion ordenReparacion) {
+        this.ordenReparacion = ordenReparacion;
+    }
 }

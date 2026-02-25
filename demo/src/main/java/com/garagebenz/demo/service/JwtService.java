@@ -16,14 +16,14 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtService {
 
-    // IMPORTANTE: Esta clave debe ser larga y secreta
+
     private static final String SECRET_KEY = "586E62725B75323033353436382F423F4528482B4B6250655368566D59713374";
 
-    // --- EL MÉTODO QUE TE DABA ERROR ---
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
-    // Para extraer el rol después si lo necesitas
+
 
     public String extractRol(String token) {
         return extractClaim(token, claims -> claims.get("rol", String.class));
@@ -61,7 +61,7 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Este es el método que usará tu AuthService de Spring para crear el token inicial
+
     public String generateToken(String username, String rol) {
         return Jwts.builder()
                 .setSubject(username)

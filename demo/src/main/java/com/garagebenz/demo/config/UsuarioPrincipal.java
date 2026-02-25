@@ -15,7 +15,7 @@ public class UsuarioPrincipal implements UserDetails {
     public UsuarioPrincipal(String username, String password, String rol) {
         this.username = username;
         this.password = password;
-        // Convertimos el rol (cliente/trabajador/admin) en un permiso de Spring
+     
         this.authorities = Collections.singletonList(new SimpleGrantedAuthority(rol));
     }
 

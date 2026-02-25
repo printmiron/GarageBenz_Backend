@@ -32,19 +32,19 @@ public class FacturaController {
     @Autowired
     private OrdenReparacionRepository ordenRepo;
 
-    // 1. GENERAR FACTURA: Cierra una orden y crea la factura
+   
     @PostMapping("/generar/{idOr}")
     public ResponseEntity<Factura> crearFactura(@PathVariable UUID idOr) {
         return ResponseEntity.ok(facturaService.generarFactura(idOr));
     }
 
-    // 2. LISTAR TODAS: Para que el admin vea el historial
+   
     @GetMapping
     public List<Factura> listarTodas() {
         return facturaRepo.findAll();
     }
 
-    // 3. ESTADÍSTICAS MENSUALES (EL DASHBOARD DEL ADMIN)
+   
     @GetMapping("/stats/mensual/{mes}")
     public ResponseEntity<?> obtenerStatsMensuales(@PathVariable int mes) {
         Double ingresos = facturaRepo.sumarIngresosMensuales(mes);

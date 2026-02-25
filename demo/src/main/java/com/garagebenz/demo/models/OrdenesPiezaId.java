@@ -21,25 +21,38 @@ public class OrdenesPiezaId implements Serializable {
     @Column(name = "id_pieza", columnDefinition = "CHAR(36)")
     private UUID idPieza;
 
-    public OrdenesPiezaId() {}
+    public OrdenesPiezaId() {
+    }
 
     public OrdenesPiezaId(UUID idOr, UUID idPieza) {
         this.idOr = idOr;
         this.idPieza = idPieza;
     }
 
-    // Getters y Setters
-    public UUID getIdOr() { return idOr; }
-    public void setIdOr(UUID idOr) { this.idOr = idOr; }
+    public UUID getIdOr() {
+        return idOr;
+    }
 
-    public UUID getIdPieza() { return idPieza; }
-    public void setIdPieza(UUID idPieza) { this.idPieza = idPieza; }
+    public void setIdOr(UUID idOr) {
+        this.idOr = idOr;
+    }
 
-    // Es una buena práctica implementar equals y hashCode en IDs compuestos
+    public UUID getIdPieza() {
+        return idPieza;
+    }
+
+    public void setIdPieza(UUID idPieza) {
+        this.idPieza = idPieza;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         OrdenesPiezaId that = (OrdenesPiezaId) o;
         return Objects.equals(idOr, that.idOr) && Objects.equals(idPieza, that.idPieza);
     }

@@ -38,10 +38,10 @@ public class Vehiculo {
     @JsonBackReference(value = "cliente-vehiculo")
     private Cliente cliente;
 
-    // CONSTRUCTOR VACÍO (Obligatorio para JPA)
+   
     public Vehiculo() {}
 
-    // GETTERS Y SETTERS CORREGIDOS (Todos usan String para el ID)
+    
     public String getIdVehiculo() {
         return idVehiculo;
     }

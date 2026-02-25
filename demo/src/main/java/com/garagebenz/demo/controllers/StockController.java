@@ -65,14 +65,14 @@ public class StockController {
             @RequestParam UUID idPieza,
             @RequestParam int cantidad) {
 
-        // Ahora esto NO puede fallar, porque ordenRepo es el Repository
+     
         OrdenReparacion orden = ordenRepo.findById(idOr)
                 .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + idOr));
 
         Piezas piezas = piezasRepo.findById(idPieza)
                 .orElseThrow(() -> new RuntimeException("Pieza no encontrada con ID: " + idPieza));
 
-        // Construcción del objeto de relación
+     
         OrdenesPiezaId idCompuesto = new OrdenesPiezaId(idOr, idPieza);
 
         OrdenesPieza registro = new OrdenesPieza();
@@ -81,18 +81,18 @@ public class StockController {
         registro.setPieza(piezas);
         registro.setCantidadUsada(cantidad);
 
-        // Guardado final
+
         ordenesPiezaRepo.save(registro);
 
         return ResponseEntity.ok("Operación exitosa: Pieza vinculada a la orden.");
     }
 
-    // En StockController.java
+
     @PutMapping("/reponer")
     public ResponseEntity<?> reponerStock(@RequestBody Map<String, Object> payload) {
-        // El "idPieza" viene de Angular como String, lo pasamos a UUID
+   
         UUID idPieza = UUID.fromString(payload.get("idPieza").toString());
-        // La "cantidad" viene como número
+
         Integer cantidad = Integer.parseInt(payload.get("cantidad").toString());
 
         stockService.sumarStock(idPieza, cantidad);

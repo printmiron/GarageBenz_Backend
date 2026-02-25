@@ -47,14 +47,14 @@ public class PiezasService implements IPiezasService {
 
     @Transactional
     public Piezas crearPiezaConStock(PiezaCrearDTO dto) {
-        // 1. Crear y guardar la pieza
+
         Piezas nuevaPieza = new Piezas();
         nuevaPieza.setNombre(dto.nombre);
         nuevaPieza.setDescripcion(dto.descripcion);
         nuevaPieza.setPrecio(dto.precio);
         Piezas piezaGuardada = piezasRepo.save(nuevaPieza);
 
-        // 2. Crear el registro de stock vinculado
+  
         Stock nuevoStock = new Stock();
         nuevoStock.setIdStock(UUID.randomUUID());
         nuevoStock.setPieza(piezaGuardada);

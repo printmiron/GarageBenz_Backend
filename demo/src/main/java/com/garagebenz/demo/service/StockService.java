@@ -15,7 +15,7 @@ import com.garagebenz.demo.repository.StockRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class StockService implements IStockService { // <--- IMPORTANTE: Implementar la interfaz
+public class StockService implements IStockService { 
 
     @Autowired
     private StockRepository stockRepository;
@@ -47,14 +47,14 @@ public class StockService implements IStockService { // <--- IMPORTANTE: Impleme
     @Override
     @Transactional
     public void sumarStock(UUID idPieza, Integer cantidad) {
-        // Buscamos el registro de stock por el ID de la pieza
+
         Stock stock = stockRepository.findByPiezaIdPieza(idPieza)
                 .orElseThrow(() -> new RuntimeException("Error: No se encontró registro de stock para esta pieza"));
 
-        // Sumamos la nueva cantidad
+
         stock.setCantidad(stock.getCantidad() + cantidad);
         
-        // Guardamos los cambios
+  
         stockRepository.save(stock);
     }
 

@@ -18,7 +18,7 @@ public class CitaService {
     private CitaRepository citaRepository;
 
     public List<Cita> findByClienteId(String idCliente) {
-        // Buscamos a través de la relación Cliente
+
         return citaRepository.findByCliente_IdCliente(UUID.fromString(idCliente));
     }
 
@@ -27,13 +27,13 @@ public class CitaService {
     }
 
     public void updateEstado(String id, String nuevoEstado) {
-        // Convertimos el String id a UUID y el String nuevoEstado al Enum
+     
         citaRepository.findById(UUID.fromString(id)).ifPresent(cita -> {
             try {
                 cita.setEstado(Cita.EstadoCita.valueOf(nuevoEstado));
                 citaRepository.save(cita);
             } catch (IllegalArgumentException e) {
-                // Manejar error si el estado enviado no existe en el Enum
+            
                 System.out.println("Estado no válido: " + nuevoEstado);
             }
         });
@@ -44,7 +44,7 @@ public class CitaService {
     }
 
     public List<Cita> findCitasHoy() {
-        // Usamos el método que ya tienes en el repositorio
+     
         return citaRepository.findByFechaCitaOrderByHoraCitaAsc(LocalDate.now());
     }
 }

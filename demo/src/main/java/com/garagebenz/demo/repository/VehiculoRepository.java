@@ -12,12 +12,12 @@ import com.garagebenz.demo.models.Vehiculo;
 @Repository
 public interface VehiculoRepository extends JpaRepository<Vehiculo, String> {
 
-    // Si Cliente usa UUID, esto está bien, pero si usa String, cámbialo también
+
     List<Vehiculo> findByCliente_IdCliente(UUID idCliente);
 
     Vehiculo findByMatricula(String matricula);
 
-    // Estos métodos ya no necesitan UUID.fromString porque ahora TODO es String
+
     default Optional<Vehiculo> findByIdString(String id) {
         return findById(id);
     }

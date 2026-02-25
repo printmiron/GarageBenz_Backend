@@ -48,23 +48,23 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Orígenes permitidos (Angular)
+        
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
 
-        // Métodos HTTP permitidos
+
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        // Cabeceras permitidas (Authorization es la más importante para JWT)
+        
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
 
-        // Permitir que el cliente envíe cookies o auth headers
+    
         configuration.setAllowCredentials(true);
 
-        // Tiempo que el navegador guarda la configuración de CORS para esta URL (30 min)
+       
         configuration.setMaxAge(1800L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Aplicar a todos los endpoints de la API
+      
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

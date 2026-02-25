@@ -57,14 +57,11 @@ public class OrdenReparacionService implements IOrdenReparacionService {
         return orRepository.save(or);
     }
 
-    /**
-     * PASO 1: Abrir la orden desde la agenda. La Cita pasa a 'En_proceso'
-     * (Visibilidad para el cliente).
-     */
+   
     @Override
     @Transactional
     public OrdenReparacion abrirDesdeCita(UUID idCita, UUID idTrabajador) {
-        // Evitar duplicados
+
         if (orRepository.existsByCitaIdCita(idCita)) {
             throw new RuntimeException("Ya existe una orden de trabajo activa para esta cita.");
         }
@@ -75,11 +72,11 @@ public class OrdenReparacionService implements IOrdenReparacionService {
         Trabajador trabajador = trabajadorRepository.findById(idTrabajador)
                 .orElseThrow(() -> new RuntimeException("Trabajador no encontrado"));
 
-        // 1. Cambiar estado de la Cita a EN PROCESO
+   
         cita.setEstado(Cita.EstadoCita.En_proceso);
         citaRepository.save(cita);
 
-        // 2. Crear nueva Orden de Reparación
+  
         OrdenReparacion nuevaOrden = new OrdenReparacion();
         nuevaOrden.setCita(cita);
         nuevaOrden.setTrabajador(trabajador);
@@ -90,27 +87,21 @@ public class OrdenReparacionService implements IOrdenReparacionService {
         return orRepository.save(nuevaOrden);
     }
 
-    /**
-     * PASO 2: Finalizar el trabajo desde el panel de órdenes. La Cita pasa a
-     * 'Completada' definitivamente.
-     */
     @Override
     @Transactional
     public OrdenReparacion finalizarOrden(UUID id, OrdenReparacion datosNuevos) {
-        // 1. Buscar la orden
+
         OrdenReparacion or = orRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Orden no encontrada"));
 
-        // 2. Actualizar datos técnicos de la orden
+
         or.setDiagnostico(datosNuevos.getDiagnostico());
         or.setHoras(datosNuevos.getHoras());
         or.setEstadoRep(OrdenReparacion.EstadoRep.Completada);
-
-        // --- AQUÍ DEBES PONER LA FECHA ---
         or.setFechaFin(LocalDate.now()); 
-        // ---------------------------------
 
-        // 3. Cambiar estado de la Cita vinculada a COMPLETADA
+
+
         if (or.getCita() != null) {
             Cita citaAsociada = or.getCita();
             citaAsociada.setEstado(Cita.EstadoCita.Completada);

@@ -51,13 +51,13 @@ public class UsuarioServiceImpl implements IUsuarioService {
 
     @Override
     public Trabajador guardarTrabajador(Trabajador trabajador) {
-        // Buscamos usando el Enum, no un String
+   
         Rol rol = rolRepo.findByNombreRol(Rol.NombreRol.Trabajador)
                 .orElseThrow(() -> new RuntimeException("Error: Rol TRABAJADOR no encontrado"));
 
         trabajador.setRol(rol);
 
-        // Encriptar contraseña
+ 
         trabajador.setContrasena(passwordEncoder.encode(trabajador.getContrasena()));
 
         return trabajadorRepo.save(trabajador);

@@ -24,7 +24,7 @@ public class FacturaService {
     @Autowired
     private OrdenReparacionRepository ordenRepo;
     @Autowired
-    private StockRepository stockRepo; // Asumo que tienes este repositorio
+    private StockRepository stockRepo; 
 
     @Transactional
     public Factura generarFactura(UUID idOr) {

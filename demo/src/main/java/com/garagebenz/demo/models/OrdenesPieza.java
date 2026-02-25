@@ -19,16 +19,16 @@ public class OrdenesPieza {
     @EmbeddedId
     private OrdenesPiezaId id;
 
-    // Relación con la Orden de Reparación
+   
     @ManyToOne
-    @MapsId("idOr") // Este nombre debe coincidir exactamente con el campo en OrdenesPiezaId
+    @MapsId("idOr")
     @JoinColumn(name = "id_or", columnDefinition = "CHAR(36)")
     @JdbcTypeCode(Types.VARCHAR)
     private OrdenReparacion orden;
 
-    // Relación con la Pieza
+  
     @ManyToOne
-    @MapsId("idPieza") // Este nombre debe coincidir exactamente con el campo en OrdenesPiezaId
+    @MapsId("idPieza") 
     @JoinColumn(name = "id_pieza", columnDefinition = "CHAR(36)")
     @JdbcTypeCode(Types.VARCHAR)
     private Piezas piezas;
@@ -39,7 +39,7 @@ public class OrdenesPieza {
     public OrdenesPieza() {
     }
 
-    // Constructor de conveniencia
+
     public OrdenesPieza(OrdenReparacion orden, Piezas pieza, int cantidadUsada) {
         this.id = new OrdenesPiezaId(orden.getIdOr(), pieza.getIdPieza());
         this.orden = orden;
@@ -47,7 +47,7 @@ public class OrdenesPieza {
         this.cantidadUsada = cantidadUsada;
     }
 
-    // --- GETTERS Y SETTERS ---
+
 
     public OrdenesPiezaId getId() {
         return id;

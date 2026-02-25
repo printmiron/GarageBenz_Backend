@@ -64,9 +64,11 @@ public class Cita {
     private Vehiculo vehiculo;
 
     @OneToMany(mappedBy = "cita", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore // No queremos listar todas las órdenes al ver una cita individual en este flujo
+    //Evita que un campo se incluya en el JSON cuando envías datos al Frontend 
+    @JsonIgnore 
     private List<OrdenReparacion> ordenes;
 
+    // Ejecuta un método automáticamente justo antes de insertar un registro nuevo en la base de datos
     @PrePersist
     public void prePersist() {
         if (idCita == null) {
@@ -74,7 +76,7 @@ public class Cita {
         }
     }
 
-    // --- GETTERS Y SETTERS ---
+
     public UUID getIdCita() {
         return idCita;
     }

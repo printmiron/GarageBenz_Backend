@@ -35,7 +35,7 @@ public class OrdenReparacion {
 
     @ManyToOne
     @JoinColumn(name = "id_cita", nullable = false)
-    @JsonIgnoreProperties({"cliente", "vehiculo", "ordenes"}) // Evita que la cita traiga de nuevo al cliente
+    @JsonIgnoreProperties({"cliente", "vehiculo", "ordenes"}) 
     private Cita cita;
 
     @ManyToOne
@@ -66,11 +66,11 @@ public class OrdenReparacion {
     }
 
     @OneToMany(mappedBy = "orden", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("orden") // Evita bucle Orden -> Pieza -> Orden
+    @JsonIgnoreProperties("orden")
     private List<OrdenesPieza> piezas;
 
     @OneToOne(mappedBy = "ordenReparacion")
-    @JsonBackReference // Evita bucle infinito con Factura
+    @JsonBackReference 
     private Factura factura;
 
     @PrePersist
@@ -83,7 +83,7 @@ public class OrdenReparacion {
         }
     }
 
-    // --- GETTERS Y SETTERS ---
+
     public UUID getIdOr() {
         return idOr;
     }
