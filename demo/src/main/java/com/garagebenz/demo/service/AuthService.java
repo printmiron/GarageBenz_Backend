@@ -125,7 +125,7 @@ public class AuthService {
             return "Administrador registrado con éxito";
 
         } else {
-            // Por defecto o si es Cliente
+       
             Cliente c = new Cliente();
             c.setIdCliente(nuevoId);
             c.setNombre(request.getNombre());
