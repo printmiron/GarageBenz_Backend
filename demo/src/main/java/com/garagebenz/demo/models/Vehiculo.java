@@ -1,7 +1,11 @@
 package com.garagebenz.demo.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,9 +22,9 @@ import jakarta.persistence.Table;
 public class Vehiculo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID) 
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_vehiculo", length = 36, nullable = false, updatable = false)
-    private String idVehiculo; 
+    private String idVehiculo;
 
     @Column(nullable = false, unique = true, length = 20)
     private String matricula;
@@ -38,10 +43,21 @@ public class Vehiculo {
     @JsonBackReference(value = "cliente-vehiculo")
     private Cliente cliente;
 
-   
-    public Vehiculo() {}
+    @OneToMany(mappedBy = "vehiculo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<OrdenReparacion> ordenes;
 
-    
+    public List<OrdenReparacion> getOrdenes() {
+        return ordenes;
+    }
+
+    public void setOrdenes(List<OrdenReparacion> ordenes) {
+        this.ordenes = ordenes;
+    }
+
+    public Vehiculo() {
+    }
+
     public String getIdVehiculo() {
         return idVehiculo;
     }
