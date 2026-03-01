@@ -45,19 +45,23 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
+    @org.springframework.transaction.annotation.Transactional
     public void eliminarTrabajador(UUID id) {
-        trabajadorRepo.deleteById(id);
+        Trabajador trabajador = trabajadorRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Trabajador no encontrado: " + id));
+
+    
+        trabajadorRepo.delete(trabajador);
     }
 
     @Override
     public Trabajador guardarTrabajador(Trabajador trabajador) {
-   
+
         Rol rol = rolRepo.findByNombreRol(Rol.NombreRol.Trabajador)
                 .orElseThrow(() -> new RuntimeException("Error: Rol TRABAJADOR no encontrado"));
 
         trabajador.setRol(rol);
 
- 
         trabajador.setContrasena(passwordEncoder.encode(trabajador.getContrasena()));
 
         return trabajadorRepo.save(trabajador);

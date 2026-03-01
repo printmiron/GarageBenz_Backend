@@ -33,9 +33,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                // ESTA LÍNEA ES VITAL:
                 .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-                // Permitimos las dos variantes por si acaso
                 .requestMatchers("/api/auth/**", "/auth/**").permitAll()
                 .anyRequest().authenticated()
                 )
@@ -49,18 +47,14 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-
+        configuration.setAllowedOrigins(List.of("http://localhost:4200", "https://garagebenz.web.app"));
 
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-        
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Origin"));
 
-    
         configuration.setAllowCredentials(true);
 
-       
         configuration.setMaxAge(1800L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -45,29 +46,28 @@ public class JwtFilter extends OncePerRequestFilter {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
                 if (jwtService.isTokenValid(jwt, userDetails)) {
-                    // 1. Creamos el token de autenticación
+
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
                             userDetails.getAuthorities()
                     );
 
-                    // 2. Cargamos los detalles de la petición ANTES de setearlo
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    // 3. Lo metemos en el contexto (UNA SOLA VEZ)
+
                     SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                    System.out.println(">>> AUTENTICACIÓN FIJADA para: " + username);
+                    System.out.println("AUTENTICACINN FIJADA para: " + username);
                 }
             }
-        } catch (Exception e) {
+        } catch (UsernameNotFoundException e) {
             SecurityContextHolder.clearContext();
             System.out.println("Error en JwtFilter: " + e.getMessage());
         }
 
-        // 4. Continuamos la cadena
-        System.out.println(">>> Filtro finalizado para: "
+        
+        System.out.println("Filtro finalizado para: "
                 + (SecurityContextHolder.getContext().getAuthentication() != null ? "USUARIO IDENTIFICADO" : "NADIE"));
         filterChain.doFilter(request, response);
     }

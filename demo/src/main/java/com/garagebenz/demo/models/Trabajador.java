@@ -1,20 +1,26 @@
 package com.garagebenz.demo.models;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.JdbcTypeCode;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Trabajador")
 public class Trabajador {
+
     @Id
     @JdbcTypeCode(java.sql.Types.VARCHAR)
     @Column(name = "id_trabajador", columnDefinition = "CHAR(36)")
@@ -47,6 +53,18 @@ public class Trabajador {
         if (idTrabajador == null) {
             idTrabajador = UUID.randomUUID();
         }
+    }
+
+    @OneToMany(mappedBy = "trabajador", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<OrdenReparacion> ordenes;
+
+    public List<OrdenReparacion> getOrdenes() {
+        return ordenes;
+    }
+
+    public void setOrdenes(List<OrdenReparacion> ordenes) {
+        this.ordenes = ordenes;
     }
 
     public UUID getIdTrabajador() {
@@ -112,8 +130,5 @@ public class Trabajador {
     public void setRol(Rol rol) {
         this.rol = rol;
     }
-
-
-    
 
 }

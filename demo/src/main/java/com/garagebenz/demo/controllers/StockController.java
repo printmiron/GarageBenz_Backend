@@ -65,22 +65,27 @@ public class StockController {
             @RequestParam UUID idPieza,
             @RequestParam int cantidad) {
 
-     
         OrdenReparacion orden = ordenRepo.findById(idOr)
                 .orElseThrow(() -> new RuntimeException("Orden no encontrada con ID: " + idOr));
 
         Piezas piezas = piezasRepo.findById(idPieza)
                 .orElseThrow(() -> new RuntimeException("Pieza no encontrada con ID: " + idPieza));
 
-     
         OrdenesPiezaId idCompuesto = new OrdenesPiezaId(idOr, idPieza);
 
-        OrdenesPieza registro = new OrdenesPieza();
-        registro.setId(idCompuesto);
-        registro.setOrden(orden);
-        registro.setPieza(piezas);
-        registro.setCantidadUsada(cantidad);
 
+        OrdenesPieza registro = ordenesPiezaRepo.findById(idCompuesto)
+                .orElse(null);
+
+        if (registro != null) {
+            registro.setCantidadUsada(registro.getCantidadUsada() + cantidad);
+        } else {
+            registro = new OrdenesPieza();
+            registro.setId(idCompuesto);
+            registro.setOrden(orden);
+            registro.setPieza(piezas);
+            registro.setCantidadUsada(cantidad);
+        }
 
         ordenesPiezaRepo.save(registro);
 
